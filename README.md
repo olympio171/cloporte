@@ -27,7 +27,17 @@ dossier avec n'importe quel serveur statique :
 python3 -m http.server 8000
 ```
 
-Le site fonctionne tel quel sur GitHub Pages (Settings → Pages → branche et dossier racine).
+## Publication
+
+Le site est prévu pour GitHub Pages, sans étape de compilation :
+
+1. Dans le dépôt, ouvrez **Settings → Pages**.
+2. Sous **Build and deployment**, choisissez **Deploy from a branch**.
+3. Sélectionnez la branche du site et le dossier **/ (root)**, puis **Save**.
+
+Le site est alors servi à l'adresse `https://olympio171.github.io/cloporte/` après une à deux minutes.
+Le fichier `.nojekyll` désactive le traitement Jekyll, `404.html` renvoie les liens cassés vers
+l'accueil et `assets/og.png` sert d'aperçu lors des partages sur les réseaux sociaux.
 
 ## Structure
 

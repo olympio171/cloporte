@@ -87,7 +87,7 @@
         "Éclairez faiblement le côté sec (lampe basse consommation) pour créer un gradient de température."
       ],
       entretien: ["Humidifiez seulement sous l'écorce, une à deux fois par semaine.", "Feuilles sèches de chêne vert ou d'olivier en permanence.", "Protéines une fois par semaine."],
-      especes: ['armadillidium-klugii', 'armadillidium-maculatum', 'armadillidium-gestroi', 'armadillidium-granulatum', 'porcellio-expansus', 'porcellio-hoffmannseggi', 'porcellio-magnificus', 'porcellio-bolivari', 'porcellio-ornatus', 'porcellio-haasi', 'armadillo-officinalis', 'porcellionides-sexfasciatus', 'armadillidium-espanyoli']
+      especes: ['armadillidium-klugii', 'armadillidium-maculatum', 'armadillidium-gestroi', 'armadillidium-granulatum', 'porcellio-expansus', 'porcellio-hoffmannseggii', 'porcellio-magnificus', 'porcellio-bolivari', 'porcellio-ornatus', 'porcellio-haasi', 'armadillo-officinalis', 'porcellionides-sexfasciatus', 'armadillidium-espanyoli']
     },
     {
       id: 'setup-sous-bois', nom: 'Sous-bois humide', sous: 'Frais, riche en bois mort', niveau: 2,
@@ -120,7 +120,7 @@
         "Placez le bac dans une pièce stable à 23 à 25 °C, sans chauffage direct."
       ],
       entretien: ["Mouillez la sphaigne tous les deux jours.", "Retirez toute nourriture moisie immédiatement.", "Ne touchez pas les colonies plus d'une fois par mois : ces espèces sont lentes et discrètes."],
-      especes: ['cubaris-rubber-ducky', 'cubaris-amber-ducky', 'cubaris-panda-king', 'cubaris-jupiter', 'cubaris-lemon-blue', 'cubaris-emperor-jade', 'cubaris-red-edge', 'cubaris-white-shark', 'merulanella-ember-bee', 'cubaris-murina']
+      especes: ['cubaris-rubber-ducky', 'cubaris-amber-ducky', 'cubaris-panda-king', 'cubaris-jupiter', 'cubaris-lemon-blue', 'ardentiella-caerulea', 'cubaris-red-edge', 'cubaris-white-shark', 'merulanella-ember-bee', 'cubaris-murina']
     },
     {
       id: 'setup-bioactif', nom: 'Vivarium bioactif', sous: 'Les cloportes comme équipe de nettoyage', niveau: 1,

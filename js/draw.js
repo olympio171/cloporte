@@ -215,8 +215,8 @@
         const rows = look.spotRows || 'both';
         const rr = s.h * (isPleon ? 0.18 : 0.24);
         if (rows !== 'lat') for (const sg of [-1, 1]) out += `<ellipse cx="${r1(sg * hw * 0.27)}" cy="${r1(yAt(s, sg * hw * 0.27, tMid))}" rx="${r1(rr * 1.25)}" ry="${r1(rr)}" fill="${c2}"/>`;
-        if (rows !== 'para') for (const sg of [-1, 1]) out += `<ellipse cx="${r1(sg * hw * 0.7)}" cy="${r1(yAt(s, sg * hw * 0.7, tMid + .05))}" rx="${r1(rr * 1.1)}" ry="${r1(rr * 0.9)}" fill="${c2}"/>`;
-        if (rows === 'center') out += `<ellipse cx="0" cy="${r1(yAt(s, 0, tMid))}" rx="${r1(rr * 1.3)}" ry="${r1(rr)}" fill="${c2}"/>`;
+        if (rows !== 'para' && rows !== 'three') for (const sg of [-1, 1]) out += `<ellipse cx="${r1(sg * hw * 0.7)}" cy="${r1(yAt(s, sg * hw * 0.7, tMid + .05))}" rx="${r1(rr * 1.1)}" ry="${r1(rr * 0.9)}" fill="${c2}"/>`;
+        if (rows === 'center' || rows === 'three') out += `<ellipse cx="0" cy="${r1(yAt(s, 0, tMid))}" rx="${r1(rr * 1.3)}" ry="${r1(rr)}" fill="${c2}"/>`;
         break;
       }
       case 'edge': {
