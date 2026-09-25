@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Oniscidea — l'encyclopédie des cloportes</title>
+<meta name="description" content="Encyclopédie illustrée de 100 espèces de cloportes : biologie, anatomie, conseils d'élevage par niveau et setups de terrarium.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=IM+Fell+English:ital@0;1&display=swap">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cellipse cx='16' cy='17' rx='9' ry='12' fill='%236f8f3e'/%3E%3Cpath d='M7 12h18M7 16h18M7 20h18M8 24h16' stroke='%2316130e' stroke-width='1.4'/%3E%3C/svg%3E">
+</head>
+<body>
+<a class="skip" href="#main">Aller au contenu</a>
+
+<header class="topbar" id="topbar">
+  <a class="brand" href="#accueil" aria-label="Oniscidea, accueil">
+    <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true"><use href="#glyph-isopod"/></svg>
+    <span class="brand-name">Oniscidea</span>
+  </a>
+  <nav class="nav" id="nav" aria-label="Navigation principale">
+    <a href="#especes" data-nav="especes">Espèces</a>
+    <a href="#anatomie" data-nav="anatomie">Anatomie</a>
+    <a href="#elevage" data-nav="elevage">Élevage</a>
+    <a href="#terrariums" data-nav="terrariums">Terrariums</a>
+  </nav>
+  <div class="topbar-tools">
+    <button class="icon-btn" id="theme-toggle" type="button" aria-label="Changer de thème (jour / nuit)">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z" fill="currentColor"/></svg>
+    </button>
+    <button class="icon-btn menu-btn" id="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+    </button>
+  </div>
+</header>
+
+<aside class="depth" id="depth" aria-hidden="true">
+  <div class="depth-track"><div class="depth-fill" id="depth-fill"></div></div>
+  <div class="depth-label"><span id="depth-cm">0 cm</span><em id="depth-layer">litière</em></div>
+</aside>
+
+<main id="main" tabindex="-1"></main>
+
+<footer class="footer">
+  <div class="footer-soil" aria-hidden="true"><svg viewBox="0 0 1440 46" preserveAspectRatio="none"><path d="M0,46 L0,26 Q45,12 90,22 Q135,34 180,20 Q225,8 270,18 Q315,30 360,24 Q405,14 450,16 Q495,28 540,22 Q585,6 630,14 Q675,26 720,20 Q765,12 810,24 Q855,34 900,22 Q945,10 990,16 Q1035,30 1080,26 Q1125,14 1170,18 Q1215,32 1260,22 Q1305,8 1350,16 Q1395,26 1440,20 L1440,46Z" fill="var(--stratum-4)"/><ellipse cx="210" cy="38" rx="9" ry="4" fill="var(--bg)" opacity=".5"/><ellipse cx="760" cy="40" rx="12" ry="4" fill="var(--bg)" opacity=".5"/><ellipse cx="1180" cy="37" rx="7" ry="3" fill="var(--bg)" opacity=".5"/></svg></div>
+  <div class="footer-inner">
+    <div>
+      <p class="footer-brand">Oniscidea</p>
+      <p class="footer-note">Une encyclopédie de terrain consacrée aux cloportes, ces crustacés qui ont quitté la mer il y a plus de 300 millions d'années pour recycler nos sous-bois.</p>
+    </div>
+    <div class="footer-cols">
+      <nav aria-label="Pied de page">
+        <a href="#especes">Les 100 espèces</a>
+        <a href="#anatomie">Anatomie &amp; cycle de vie</a>
+        <a href="#elevage">Guide d'élevage</a>
+        <a href="#terrariums">Setups de terrarium</a>
+      </nav>
+      <p class="footer-small">Illustrations générées à partir des couleurs réelles de chaque espèce. Les paramètres d'élevage sont des moyennes issues de la pratique des éleveurs&nbsp;; les aires de répartition des formes «&nbsp;sp.&nbsp;» du commerce restent indicatives. Ne prélevez jamais d'espèces protégées ou cavernicoles dans la nature.</p>
+    </div>
+  </div>
+</footer>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="glyph-isopod" viewBox="0 0 40 40">
+      <path d="M13 6c-3-3-6-3-8-2M27 6c3-3 6-3 8-2" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+      <path d="M20 5c-6 0-10 3-11 9-1 6 0 13 4 17 2 2 4 3 7 3s5-1 7-3c4-4 5-11 4-17-1-6-5-9-11-9z" fill="currentColor"/>
+      <path d="M10 12h20M9.5 16h21M9.6 20h20.8M10.4 24h19.2M12 28h16" stroke="var(--bg)" stroke-width="1.3" opacity=".75"/>
+    </symbol>
+  </defs>
+</svg>
+
+<script src="js/data/species-armadillidiidae.js"></script>
+<script src="js/data/species-porcellionidae.js"></script>
+<script src="js/data/species-armadillidae.js"></script>
+<script src="js/data/species-divers.js"></script>
+<script src="js/data/species-sauvages.js"></script>
+<script src="js/content.js"></script>
+<script src="js/draw.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
