@@ -51,13 +51,19 @@
     return artCache.get(key);
   }
 
-  function card(s) {
+  function prixChip(s) { return s.fr && s.fr.dispo > 0 ? `<span class="chip chip-prix" title="${esc(L.prix[s.fr.prix].txt)}">${L.prix[s.fr.prix].sym}</span>` : ''; }
+  function franceScore(s) { return s.fr && s.fr.dispo > 0 ? s.fr.dispo * 10 + s.fr.prix - (s.fr.collecte ? 5 : 0) : 99; }
+  function card(s, mode) {
+    const meta = mode === 'france'
+      ? (s.fr.collecte ? `<span class="chip chip-dispo">Au jardin</span>${prixChip(s)}`
+        : s.fr.dispo > 0 ? `<span class="chip chip-dispo">${L.dispo[s.fr.dispo].court}</span>${prixChip(s)}` : `<span class="chip">${L.dispo[0].court}</span>`)
+      : `${levelChip(s.niveau)}${prixChip(s)}<span class="chip">${sizeTxt(s)}</span>`;
     return `<a class="specimen" href="#sp.${s.id}">
       <div class="specimen-plate">${art(s)}<span class="specimen-no">N° ${pad3(s.no)}</span>${s.roule ? `<span class="specimen-roll chip" title="Se roule en boule">${ROLL} boule</span>` : ''}</div>
       <div class="specimen-label">
         <span class="latin">${esc(s.sci)}</span>
         <span class="common">${esc(s.nom)}</span>
-        <div class="specimen-meta">${levelChip(s.niveau)}<span class="chip">${sizeTxt(s)}</span></div>
+        <div class="specimen-meta">${meta}</div>
       </div>
     </a>`;
   }
@@ -210,6 +216,7 @@
               <span class="mono" style="font-size:.78rem;color:var(--ink-3)">${counts[i]} espèces</span>
             </a>`).join('')}
         </div>
+        <p style="margin-top:var(--s-5)"><a class="link-arrow" href="#especes-france">Petit budget ? Les espèces les plus faciles à trouver en France ${ARROW.replace('<svg', '<svg width="18" height="18"')}</a></p>
       </div>
     </section>
     ${edge('--stratum-3', '--stratum-4', 'e4')}
@@ -252,7 +259,8 @@
   /* =========================================================
      CATALOGUE
      ========================================================= */
-  const FILTERS = { q: '', lv: [], fam: '', milieu: '', zone: '', roule: '', sort: 'famille' };
+  const FILTER_DEFAULTS = { q: '', lv: [], fam: '', milieu: '', zone: '', roule: '', fr: '', sort: 'famille' };
+  const FILTERS = Object.assign({}, FILTER_DEFAULTS, { lv: [] });
   try { const saved = JSON.parse(sessionStorage.getItem('oniscidea-filters') || 'null'); if (saved) Object.assign(FILTERS, saved); } catch (e) { /* ignoré */ }
   function saveFilters() { try { sessionStorage.setItem('oniscidea-filters', JSON.stringify(FILTERS)); } catch (e) { /* ignoré */ } }
 
@@ -267,24 +275,48 @@
       if (FILTERS.zone && !s.zone.includes(FILTERS.zone)) return false;
       if (FILTERS.roule === 'oui' && !s.roule) return false;
       if (FILTERS.roule === 'non' && s.roule) return false;
+      if (FILTERS.fr === 'nature' && !s.fr.collecte) return false;
+      if (FILTERS.fr === 'budget' && !(s.fr.dispo > 0 && s.fr.prix === 1)) return false;
+      if (FILTERS.fr === 'facile' && !(s.fr.dispo === 1 || s.fr.dispo === 2)) return false;
+      if (FILTERS.fr === 'vente' && !(s.fr.dispo > 0)) return false;
       return true;
     });
     if (FILTERS.sort === 'nom') list = list.slice().sort((a, b) => a.sci.localeCompare(b.sci));
     if (FILTERS.sort === 'taille') list = list.slice().sort((a, b) => b.taille[1] - a.taille[1] || a.sci.localeCompare(b.sci));
     if (FILTERS.sort === 'niveau') list = list.slice().sort((a, b) => (a.niveau || 9) - (b.niveau || 9) || a.no - b.no);
+    if (FILTERS.sort === 'france') list = list.slice().sort((a, b) => franceScore(a) - franceScore(b) || (a.niveau || 9) - (b.niveau || 9) || a.no - b.no);
     return list;
   }
 
   function resultsHtml() {
     const list = filtered();
     if (!list.length) return { n: 0, html: `<div class="empty"><p style="font-family:var(--f-display);font-size:1.6rem;color:var(--ink)">Aucun cloporte sous cette pierre.</p><p>Aucune espèce ne correspond à ces critères. Élargissez la recherche ou réinitialisez les filtres.</p><button class="btn btn-ghost" type="button" data-reset>Réinitialiser les filtres</button></div>` };
-    if (FILTERS.sort !== 'famille') return { n: list.length, html: `<div class="grid-specimens">${list.map(card).join('')}</div>` };
+    if (FILTERS.sort === 'france') {
+      const groups = [
+        ['Dans votre jardin, gratuitement', 'Espèces communes en France : quelques individus trouvés sous une pierre ou dans le compost suffisent pour démarrer. Elles se vendent aussi pour quelques euros.', x => x.fr.collecte],
+        ['Faciles et pas chères', 'Vendues partout en France, pour moins de 15 € les 10.', x => !x.fr.collecte && x.fr.dispo > 0 && x.fr.dispo <= 2 && x.fr.prix === 1],
+        ['Faciles à commander', 'Disponibles chez plusieurs boutiques françaises.', x => !x.fr.collecte && x.fr.dispo > 0 && x.fr.dispo <= 2 && x.fr.prix > 1],
+        ['Rares en France', 'Chez quelques éleveurs spécialisés, souvent importées.', x => !x.fr.collecte && x.fr.dispo === 3],
+        ['Non commercialisées', 'Espèces sauvages, protégées ou impossibles à maintenir.', x => x.fr.dispo === 0]
+      ];
+      const html = groups.map(([t, d, f], i) => {
+        const g = list.filter(f);
+        if (!g.length) return '';
+        return `<section class="family-group" aria-labelledby="fr-${i}">
+          <div class="family-title"><h2 id="fr-${i}">${t}</h2><span>${g.length} espèce${g.length > 1 ? 's' : ''}</span></div>
+          <p class="muted" style="margin:-.4rem 0 var(--s-4);max-width:70ch">${d}</p>
+          <div class="grid-specimens">${g.map(x => card(x, 'france')).join('')}</div>
+        </section>`;
+      }).join('');
+      return { n: list.length, html: html + `<p class="footer-small" style="margin-bottom:var(--s-7)">Prix indicatifs relevés en 2025-2026 dans des boutiques françaises, pour un lot de 10 individus nés en captivité.</p>` };
+    }
+    if (FILTERS.sort !== 'famille') return { n: list.length, html: `<div class="grid-specimens">${list.map(x => card(x)).join('')}</div>` };
     const groups = {};
     list.forEach(s => { (groups[s.fam] = groups[s.fam] || []).push(s); });
     const html = C.FAMILY_ORDER.filter(f => groups[f]).map(f => `
       <section class="family-group" aria-labelledby="fam-${f}">
         <div class="family-title"><h2 id="fam-${f}"><span class="latin">${f}</span></h2><span>${esc(C.FAMILLES[f].nom)} · ${groups[f].length} espèce${groups[f].length > 1 ? 's' : ''}</span></div>
-        <div class="grid-specimens">${groups[f].map(card).join('')}</div>
+        <div class="grid-specimens">${groups[f].map(x => card(x)).join('')}</div>
       </section>`).join('');
     return { n: list.length, html };
   }
@@ -298,7 +330,7 @@
       <header class="catalog-head">
         <p class="eyebrow">Catalogue · ${SP.length} espèces · ${C.FAMILY_ORDER.length} familles</p>
         <h1>Les espèces</h1>
-        <p class="muted prose">Chaque fiche porte un numéro d'inventaire, comme dans une collection de muséum. Filtrez par niveau d'élevage, famille, milieu ou région du monde.</p>
+        <p class="muted prose">Chaque fiche porte un numéro d'inventaire, comme dans une collection de muséum. Filtrez par niveau d'élevage, famille, milieu, région du monde, ou selon la facilité à les obtenir en France.</p>
       </header>
       <div class="filters" role="search">
         <div class="filter-row">
@@ -309,6 +341,7 @@
             <option value="nom"${FILTERS.sort === 'nom' ? ' selected' : ''}>Nom latin (A→Z)</option>
             <option value="taille"${FILTERS.sort === 'taille' ? ' selected' : ''}>Plus grands d'abord</option>
             <option value="niveau"${FILTERS.sort === 'niveau' ? ' selected' : ''}>Du plus facile au plus exigeant</option>
+            <option value="france"${FILTERS.sort === 'france' ? ' selected' : ''}>Les plus faciles à obtenir en France</option>
           </select>
         </div>
         <div class="filter-row">
@@ -322,6 +355,13 @@
             <option value="">Boule ou non</option>
             <option value="oui"${FILTERS.roule === 'oui' ? ' selected' : ''}>Se roule en boule</option>
             <option value="non"${FILTERS.roule === 'non' ? ' selected' : ''}>Ne se roule pas</option>
+          </select>
+          <select class="select select-fr" id="f-fr" aria-label="Obtenir en France">
+            <option value="">Obtenir en France : toutes</option>
+            <option value="facile"${FILTERS.fr === 'facile' ? ' selected' : ''}>Faciles à commander</option>
+            <option value="budget"${FILTERS.fr === 'budget' ? ' selected' : ''}>Pas chères (moins de 15 € les 10)</option>
+            <option value="nature"${FILTERS.fr === 'nature' ? ' selected' : ''}>À trouver dans la nature</option>
+            <option value="vente"${FILTERS.fr === 'vente' ? ' selected' : ''}>Disponibles à la vente</option>
           </select>
           <span class="result-count" id="f-count" aria-live="polite"></span>
         </div>
@@ -344,6 +384,7 @@
         $('#f-mil').addEventListener('change', e => { FILTERS.milieu = e.target.value; update(); });
         $('#f-zone').addEventListener('change', e => { FILTERS.zone = e.target.value; update(); });
         $('#f-roule').addEventListener('change', e => { FILTERS.roule = e.target.value; update(); });
+        $('#f-fr').addEventListener('change', e => { FILTERS.fr = e.target.value; update(); });
         $$('.toggle[data-lvl]').forEach(b => b.addEventListener('click', () => {
           const n = Number(b.dataset.lvl);
           FILTERS.lv = FILTERS.lv.includes(n) ? FILTERS.lv.filter(x => x !== n) : FILTERS.lv.concat(n);
@@ -352,7 +393,7 @@
         }));
         $('#results').addEventListener('click', e => {
           if (!e.target.closest('[data-reset]')) return;
-          Object.assign(FILTERS, { q: '', lv: [], fam: '', milieu: '', zone: '', roule: '', sort: 'famille' });
+          Object.assign(FILTERS, FILTER_DEFAULTS, { lv: [] });
           saveFilters();
           render();
         });
@@ -407,6 +448,7 @@
       ['sec-anatomie', 'Anatomie'],
       ['sec-repro', 'Reproduction'],
       ['sec-elevage', kept ? 'Élevage' : 'Observer'],
+      ['sec-france', 'En France'],
       ['sec-setup', 'Terrarium'],
       ['sec-conseils', 'Conseils'],
       morphs.length > 1 ? ['sec-morphes', 'Morphes'] : null,
@@ -478,7 +520,7 @@
           <p class="eyebrow">${esc(fam.nom)} · <span class="latin" style="text-transform:none;letter-spacing:0">${s.fam}</span></p>
           <h1 itemprop="name">${esc(s.sci)}</h1>
           <p class="common">${esc(s.nom)}${s.en ? ` <span class="muted" style="font-size:.7em">· ${esc(s.en)}</span>` : ''}</p>
-          <div class="sp-chips">${levelChip(s.niveau)}<span class="chip">${esc(L.statut[s.statut] || s.statut)}</span>${s.roule ? `<span class="chip">${ROLL} Se roule</span>` : ''}<span class="chip">${esc(L.milieu[s.milieu])}</span></div>
+          <div class="sp-chips">${levelChip(s.niveau)}<span class="chip">${esc(L.statut[s.statut] || s.statut)}</span>${s.roule ? `<span class="chip">${ROLL} Se roule</span>` : ''}<span class="chip">${esc(L.milieu[s.milieu])}</span>${s.fr.dispo > 0 ? `<span class="chip chip-prix-lg">${L.prix[s.fr.prix].sym} · ${L.dispo[s.fr.dispo].court}</span>` : ''}</div>
           <p class="sp-intro">${esc(s.intro)}</p>
           <dl class="stats">
             <div class="stat"><dt>Taille</dt><dd>${sizeTxt(s)}</dd></div>
@@ -537,6 +579,10 @@
             ${elevageBlock}
           </section>
 
+          <section class="sp-section" id="sec-france" aria-labelledby="h-sec-france">${H('sec-france', 'Se le procurer en France')}
+            ${franceBlock(s)}
+          </section>
+
           <section class="sp-section" id="sec-setup" aria-labelledby="h-sec-setup">${H('sec-setup', 'Terrarium')}
             ${setupBlock}
           </section>
@@ -558,7 +604,7 @@
           </section>
 
           <section class="sp-section" id="sec-proches" aria-labelledby="h-sec-proches">${H('sec-proches', 'Espèces proches')}
-            <div class="grid-specimens">${related.map(card).join('')}</div>
+            <div class="grid-specimens">${related.map(x => card(x)).join('')}</div>
             <nav class="pager" aria-label="Fiches voisines">
               <a href="#sp.${prev.id}"><small>← N° ${pad3(prev.no)}</small><span class="latin">${esc(prev.sci)}</span></a>
               <a href="#sp.${next.id}"><small>N° ${pad3(next.no)} →</small><span class="latin">${esc(next.sci)}</span></a>
@@ -598,6 +644,30 @@
         }
       }
     };
+  }
+
+  function franceBlock(s) {
+    const f = s.fr, dl = L.dispo[f.dispo], px = L.prix[f.prix];
+    const nature = f.nature
+      ? `${esc(f.nature)} ${f.collecte ? 'Espèce commune : vous pouvez en prélever quelques individus pour démarrer un élevage.' : 'À observer sur place, sans prélever.'}`
+      : 'Absente à l\'état sauvage en France.';
+    const where = f.dispo === 0 ? 'Aucune source commerciale.'
+      : f.dispo === 1 ? 'Boutiques spécialisées en ligne, bourses aux reptiles, échanges entre éleveurs.'
+      : f.dispo === 2 ? 'Boutiques spécialisées françaises et éleveurs amateurs, selon les naissances.'
+      : 'Éleveurs spécialisés, commandes groupées ou import depuis l\'Allemagne et les Pays-Bas.';
+    return `<div class="two-col" style="align-items:start">
+      <dl class="spec-list france-list">
+        <div><dt>Disponibilité</dt><dd>${dl.nom}</dd></div>
+        <div><dt>Prix indicatif</dt><dd>${f.dispo > 0 ? `<span class="prix-sym">${px.sym}</span> ${px.txt}` : 'Sans objet'}</dd></div>
+        <div><dt>Où l'acheter</dt><dd>${where}</dd></div>
+        <div><dt>Dans la nature en France</dt><dd>${nature}</dd></div>
+      </dl>
+      <div class="gauges">
+        <div class="gauge"><div class="gauge-head"><span>Facilité d'accès</span><strong>${dl.court}</strong></div><div class="pips">${[1, 2, 3].map(k => `<i class="${f.dispo > 0 && k <= 4 - f.dispo ? 'on' : ''}"></i>`).join('')}</div></div>
+        <div class="gauge"><div class="gauge-head"><span>Budget</span><strong>${f.dispo > 0 ? px.sym : '—'}</strong></div><div class="pips">${[1, 2, 3, 4].map(k => `<i class="${f.dispo > 0 && k <= f.prix ? 'on on-prix' : ''}"></i>`).join('')}</div></div>
+        <p class="footer-small">${esc(dl.txt)} Prix relevés en 2025-2026 dans des boutiques françaises, pour un lot de 10 individus nés en captivité. <a class="link-arrow" href="#especes-france">Classement complet</a></p>
+      </div>
+    </div>`;
   }
 
   /* =========================================================
@@ -791,7 +861,7 @@
         </div>
         <div class="topics">${lv.topics.map((t, i) => `<div class="topic"><span class="eyebrow">${String(i + 1).padStart(2, '0')}</span><h3>${esc(t.t)}</h3><p>${esc(t.d)}</p></div>`).join('')}</div>
         <div><div class="section-head" style="margin-bottom:var(--s-4)"><h2 style="font-size:clamp(1.6rem,3vw,2.3rem)">Espèces conseillées</h2><p>Une sélection parmi les ${ORDERED.filter(s => s.niveau === n).length} espèces de niveau ${lv.titre.toLowerCase()}.</p></div>
-          <div class="grid-specimens">${rec.map(card).join('')}</div></div>
+          <div class="grid-specimens">${rec.map(x => card(x)).join('')}</div></div>
         <div class="two-col" style="align-items:start">
           <div class="note-card"><p class="eyebrow" style="color:var(--rust)">Erreurs fréquentes</p><ul class="tips warn">${lv.erreurs.map(e => `<li>${esc(e)}</li>`).join('')}</ul></div>
           <div class="note-card"><p class="eyebrow">Étape suivante</p><p>${n < 3 ? `Quand vos colonies se reproduisent régulièrement, passez au niveau ${C.NIVEAUX[n].titre.toLowerCase()}.` : 'Partagez vos observations avec d\'autres éleveurs : les données d\'élevage des espèces rares sont encore très lacunaires.'}</p><a class="link-arrow" href="#terrariums">Voir les setups de terrarium ${ARROW.replace('<svg', '<svg width="18" height="18"')}</a></div>
@@ -819,7 +889,23 @@
         <tbody>${menu.map(r => `<tr><td>${r[0]}</td><td><span class="freq">${r[1]}</span></td><td>${esc(r[2])}</td></tr>`).join('')}</tbody></table></div>
       </div>
     </section>
-    ${edge('--stratum-2', '--stratum-3', 'g2')}
+    ${edge('--stratum-2', '--stratum-4', 'g3')}
+    <section class="stratum" data-s="4" aria-labelledby="achat" id="achat">
+      <div class="wrap">
+        <div class="section-head"><p class="eyebrow">En France</p><h2 id="achat">Se procurer des cloportes</h2><p>${esc(C.ACHAT.intro)}</p></div>
+        <div class="topics topics-4">${C.ACHAT.sources.map((x, i) => `<div class="topic"><span class="eyebrow">Source ${i + 1}</span><h3>${esc(x.t)}</h3><p>${esc(x.d)}</p></div>`).join('')}</div>
+        <div class="spacer"></div>
+        <div class="section-head" style="margin-bottom:var(--s-4)"><h2 style="font-size:clamp(1.6rem,3vw,2.3rem)">Les moins chères à se procurer</h2><p>Espèces faciles à trouver en France pour moins de 15 € les 10, ou gratuitement au jardin.</p></div>
+        <div class="grid-specimens">${ORDERED.filter(x => x.fr.dispo > 0 && x.fr.prix === 1).sort((a, b) => franceScore(a) - franceScore(b) || a.no - b.no).slice(0, 8).map(x => card(x, 'france')).join('')}</div>
+        <p style="margin-top:var(--s-4)"><a class="link-arrow" href="#especes-france">Voir toutes les espèces classées par facilité d'accès ${ARROW.replace('<svg', '<svg width="18" height="18"')}</a></p>
+        <div class="spacer"></div>
+        <div class="two-col" style="align-items:start">
+          <div class="note-card"><p class="eyebrow">Bien acheter</p><ol class="tips">${C.ACHAT.conseils.map(c => `<li>${esc(c)}</li>`).join('')}</ol></div>
+          <div class="note-card"><p class="eyebrow" style="color:var(--rust)">Règles à respecter</p><ul class="tips warn">${C.ACHAT.regles.map(c => `<li>${esc(c)}</li>`).join('')}</ul></div>
+        </div>
+      </div>
+    </section>
+    ${edge('--stratum-4', '--stratum-3', 'g2')}
     <section class="stratum" data-s="3" aria-labelledby="pb">
       <div class="wrap">
         <div class="section-head"><p class="eyebrow">Dépannage</p><h2 id="pb">Problèmes courants</h2><p>Les questions que tous les éleveurs finissent par se poser.</p></div>
@@ -914,6 +1000,7 @@
     if (h === 'elevage' || h.startsWith('elevage-')) return { view: 'elevage', level: h.slice(8) };
     if (h.startsWith('setup-')) return { view: 'terrariums', anchor: h };
     if (h.startsWith('sec-')) return null; // ancres internes d'une fiche
+    if (h === 'especes-france') return { view: 'especes', preset: 'france' };
     if (['accueil', 'especes', 'anatomie', 'terrariums'].includes(h)) return { view: h };
     return { view: '404' };
   }
@@ -927,7 +1014,9 @@
     let v;
     switch (r.view) {
       case 'accueil': v = viewHome(); break;
-      case 'especes': v = viewCatalog(); break;
+      case 'especes':
+        if (r.preset === 'france') { Object.assign(FILTERS, FILTER_DEFAULTS, { lv: [], sort: 'france' }); saveFilters(); }
+        v = viewCatalog(); break;
       case 'espece': v = viewSpecies(r.id); break;
       case 'anatomie': v = viewAnatomy(); break;
       case 'elevage': v = viewGuide(r.level); break;

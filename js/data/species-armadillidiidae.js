@@ -21,6 +21,7 @@ window.CLOPORTES.push(
   matur: "6 à 12 mois",
   roule: true,
   statut: "courant",
+  fr: { dispo: 1, prix: 1, nature: "Partout en France : jardins, pelouses, talus, surtout sur sol calcaire.", collecte: true },
   look: { shape: "armadillidium", c1: "#4b4e52" },
   morphs: [
     { n: "Sauvage (mâle)", c1: "#4b4e52" },
@@ -58,6 +59,7 @@ window.CLOPORTES.push(
   matur: "8 à 12 mois",
   roule: true,
   statut: "courant",
+  fr: { dispo: 2, prix: 2, nature: "Présente à l'état sauvage en Provence et sur la Côte d'Azur." },
   look: { shape: "armadillidium", c1: "#1d1c1b", c2: "#ebe4d0", pat: "stripes" },
   morphs: [
     { n: "Zèbre classique", c1: "#1d1c1b", c2: "#ebe4d0", pat: "stripes" },
@@ -93,6 +95,7 @@ window.CLOPORTES.push(
   matur: "10 à 14 mois",
   roule: true,
   statut: "recherché",
+  fr: { dispo: 2, prix: 2 },
   look: { shape: "armadillidium", c1: "#161413", c2: "#e9c14a", edgeCol: "#c8452d", pat: ["edge", "spots"], spotRows: "para", edgeW: 0.2 },
   morphs: [
     { n: "Montenegro", c1: "#161413", c2: "#e9c14a", edgeCol: "#c8452d", pat: ["edge", "spots"], spotRows: "para", edgeW: 0.2 },
@@ -128,6 +131,7 @@ window.CLOPORTES.push(
   matur: "8 à 12 mois",
   roule: true,
   statut: "recherché",
+  fr: { dispo: 2, prix: 2 },
   look: { shape: "armadillidium", c1: "#1e1d1c", c2: "#f0c93a", pat: "spots" },
   morphs: [
     { n: "Typique", c1: "#1e1d1c", c2: "#f0c93a", pat: "spots" }
@@ -162,6 +166,7 @@ window.CLOPORTES.push(
   matur: "6 à 10 mois",
   roule: true,
   statut: "courant",
+  fr: { dispo: 1, prix: 1, nature: "Assez commune dans l'ouest et le sud, souvent près des maisons et dans les serres.", collecte: true },
   look: { shape: "armadillidium", c1: "#6c6760", c2: "#a59c8a", c3: "#4d4943", pat: "speckle", tweak: { k: 0.075 } },
   morphs: [
     { n: "Sauvage", c1: "#6c6760", c2: "#a59c8a", c3: "#4d4943", pat: "speckle" },
@@ -197,6 +202,7 @@ window.CLOPORTES.push(
   matur: "8 à 12 mois",
   roule: true,
   statut: "courant",
+  fr: { dispo: 2, prix: 2, nature: "Littoral méditerranéen, sous les pierres près de la mer." },
   look: { shape: "armadillidium", c1: "#5a5750", c2: "#d8c27a", pat: ["tubercles", "spots"], spotRows: "lat", gloss: 0.08 },
   morphs: [
     { n: "Typique", c1: "#5a5750", c2: "#d8c27a", pat: ["tubercles", "spots"], spotRows: "lat" }
@@ -231,6 +237,7 @@ window.CLOPORTES.push(
   matur: "10 à 12 mois",
   roule: true,
   statut: "rare",
+  fr: { dispo: 0, prix: 0, nature: "Très localisée dans les éboulis forestiers de l'est et des montagnes." },
   look: { shape: "armadillidium", c1: "#4e4539", c2: "#b8a07a", c3: "#2e2923", pat: ["blotch", "speckle"] },
   morphs: [],
   intro: "Petite armadille marbrée de brun, de crème et de noir, typique des vieilles forêts rocheuses. Rare et discrète.",
@@ -263,6 +270,7 @@ window.CLOPORTES.push(
   matur: "10 à 12 mois",
   roule: true,
   statut: "rare",
+  fr: { dispo: 0, prix: 0 },
   look: { shape: "armadillidium", c1: "#3d342c", c2: "#c9a870", c3: "#9a5a3a", pat: "marble" },
   morphs: [],
   intro: "Une miniature de 5 mm aux motifs de mosaïque ocre et rouille. Le plus petit Armadillidium d'Europe du Nord.",
@@ -295,6 +303,7 @@ window.CLOPORTES.push(
   matur: "8 à 12 mois",
   roule: true,
   statut: "courant",
+  fr: { dispo: 3, prix: 1, nature: "Vieux murs et jardins de l'ouest et du sud de la France.", collecte: true },
   look: { shape: "armadillidium", c1: "#4d4b47", c2: "#9d977f", c3: "#3a3834", pat: "speckle", tweak: { W: 142, k: 0.065, flare: 0.03 } },
   morphs: [],
   intro: "Une grande armadille aplatie, taillée pour se glisser dans les joints des vieux murs de pierre.",
@@ -327,6 +336,7 @@ window.CLOPORTES.push(
   matur: "12 mois",
   roule: true,
   statut: "rare",
+  fr: { dispo: 0, prix: 0, nature: "Laisses de mer des plages de la Manche et de l'Atlantique. Espèce fragile : observation seulement." },
   look: { shape: "armadillidium", c1: "#cfc6b3", c2: "#a39b88", c3: "#e3dccb", pat: ["tubercles", "speckle"], gloss: 0.05 },
   morphs: [],
   intro: "Blanc sable, couvert de petites soies qui retiennent les grains : un cloporte camouflé pour vivre sur la laisse de mer.",
@@ -359,6 +369,7 @@ window.CLOPORTES.push(
   matur: "10 à 12 mois",
   roule: true,
   statut: "rare",
+  fr: { dispo: 3, prix: 2, nature: "Forêts humides de l'est de la France." },
   look: { shape: "armadillidium", c1: "#3e3b37", c2: "#8d8471", edgeCol: "#9a917d", pat: ["edge", "spots"], spotRows: "para", gloss: 0.04, edgeW: 0.16 },
   morphs: [],
   intro: "Une armadille forestière sans éclat, grise et poudrée, dont les épimères pâles dessinent un liseré clair.",
@@ -391,6 +402,7 @@ window.CLOPORTES.push(
   matur: "8 à 12 mois",
   roule: true,
   statut: "rare",
+  fr: { dispo: 3, prix: 2 },
   look: { shape: "armadillidium", c1: "#57503f", c2: "#cdb670", pat: "spots", spotRows: "para" },
   morphs: [],
   intro: "Son nom dit tout : la teinte de fond va du gris au brun olive, toujours rehaussée de taches jaunâtres alignées.",
@@ -423,6 +435,7 @@ window.CLOPORTES.push(
   matur: "12 mois",
   roule: true,
   statut: "rare",
+  fr: { dispo: 2, prix: 2 },
   look: { shape: "armadillidium", c1: "#2d2b29", c2: "#e8e4da", pat: "spots", spotRows: "three" },
   morphs: [
     { n: "Typique", c1: "#2d2b29", c2: "#e8e4da", pat: "spots", spotRows: "three" },
@@ -458,6 +471,7 @@ window.CLOPORTES.push(
   matur: "10 mois",
   roule: true,
   statut: "rare",
+  fr: { dispo: 2, prix: 1 },
   look: { shape: "armadillidium", c1: "#34302c", c2: "#d8cfb8", pat: "dalmatian" },
   morphs: [],
   intro: "Une armadille italienne ponctuée de crème, décrite en 1900 par Paolo Tua et dédiée au zoologiste turinois Mario Giacinto Peracca. L'une des plus faciles à reproduire.",
@@ -490,6 +504,7 @@ window.CLOPORTES.push(
   matur: "12 mois",
   roule: true,
   statut: "rare",
+  fr: { dispo: 3, prix: 2 },
   look: { shape: "armadillidium", c1: "#8a8479", c2: "#ece7dc", c3: "#5b4a3a", pat: "marble" },
   morphs: [
     { n: "Marbelized", c1: "#8a8479", c2: "#ece7dc", c3: "#5b4a3a", pat: "marble" }
@@ -524,6 +539,7 @@ window.CLOPORTES.push(
   matur: "Jusqu'à 3 ans pour la taille adulte",
   roule: true,
   statut: "rare",
+  fr: { dispo: 3, prix: 3 },
   look: { shape: "armadillidium", c1: "#d9772f", c2: "#f1d7a8", pat: "speckle" },
   morphs: [
     { n: "Orange", c1: "#d9772f", c2: "#f1d7a8", pat: "speckle" }
@@ -558,6 +574,7 @@ window.CLOPORTES.push(
   matur: "12 mois",
   roule: true,
   statut: "protégé",
+  fr: { dispo: 0, prix: 0 },
   look: { shape: "armadillidium", c1: "#3a2f25", c2: "#a58f6a", pat: "spots", spotRows: "para" },
   morphs: [],
   intro: "L'armadille des tourbières. Une espèce menacée qui a besoin de pieds constamment mouillés, ce qui est rare dans cette famille.",
@@ -590,6 +607,7 @@ window.CLOPORTES.push(
   matur: "10 mois",
   roule: true,
   statut: "rare",
+  fr: { dispo: 2, prix: 2 },
   look: { shape: "armadillidium", c1: "#474038", c2: "#d9b784", c3: "#2c2722", pat: ["spots", "speckle"], spotRows: "para" },
   morphs: [
     { n: "Typique", c1: "#474038", c2: "#d9b784", c3: "#2c2722", pat: ["spots", "speckle"], spotRows: "para" },
@@ -625,6 +643,7 @@ window.CLOPORTES.push(
   matur: "10 mois",
   roule: true,
   statut: "rare",
+  fr: { dispo: 3, prix: 2, nature: "Façade atlantique, sur sols calcaires : haies, lisières et talus." },
   look: { shape: "armadillidium", c1: "#5e3b45", c2: "#8e6470", c3: "#3a2229", pat: "speckle", gloss: 0.34, eyeN: 1 },
   morphs: [],
   intro: "Une armadille couleur prune, brillante comme une perle. Autrefois nommée Eluma purpurascens.",

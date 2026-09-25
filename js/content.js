@@ -24,6 +24,19 @@
       3: { nom: 'Forte', txt: "Grande grille sur le couvercle et aération latérale pour créer un courant d'air." }
     },
     repro: { 1: 'Lente', 2: 'Moyenne', 3: 'Rapide' },
+    dispo: {
+      0: { nom: 'Non commercialisé', court: 'Introuvable', txt: "Absent des boutiques et des bourses : espèce sauvage, protégée ou impossible à maintenir." },
+      1: { nom: 'Très facile à trouver', court: 'Très facile', txt: "Vendu par la plupart des boutiques françaises spécialisées, en ligne et dans les bourses aux reptiles." },
+      2: { nom: 'Facile à commander', court: 'Facile', txt: "Proposé par plusieurs boutiques et éleveurs français, parfois en rupture selon les naissances." },
+      3: { nom: 'Rare en France', court: 'Rare', txt: "Chez quelques éleveurs spécialisés seulement, stocks irréguliers, souvent importé d'Allemagne ou des Pays-Bas." }
+    },
+    prix: {
+      0: { sym: '—', txt: 'Sans objet' },
+      1: { sym: '€', txt: 'Moins de 15 € les 10' },
+      2: { sym: '€€', txt: '15 à 30 € les 10' },
+      3: { sym: '€€€', txt: '30 à 60 € les 10' },
+      4: { sym: '€€€€', txt: 'Plus de 60 € les 10' }
+    },
     statut: { courant: 'Courant en élevage', 'recherché': 'Recherché', rare: 'Rare', sauvage: 'Sauvage', 'protégé': 'Protégé ou menacé' },
     milieu: {
       foret: 'Forêt et litière', mediterraneen: 'Garrigue méditerranéenne', tropical: 'Forêt tropicale', littoral: 'Littoral',
@@ -317,7 +330,30 @@
     ['Super-ordre', 'Peracarida'], ['Ordre', 'Isopoda'], ['Sous-ordre', 'Oniscidea']
   ];
 
+  /* ---------- Se procurer des cloportes en France ---------- */
+  const ACHAT = {
+    intro: "La plupart des espèces communes coûtent moins qu'un sachet de nourriture pour chat, et plusieurs vivent déjà dans votre jardin. Les espèces rares, elles, s'achètent auprès d'éleveurs spécialisés et peuvent dépasser 10 € l'individu.",
+    sources: [
+      { t: 'Votre jardin', d: "Porcellio scaber, Armadillidium vulgare, Oniscus asellus : quelques individus prélevés sous une pierre ou dans le compost suffisent pour démarrer, gratuitement." },
+      { t: 'Boutiques en ligne françaises', d: "De nombreuses boutiques spécialisées vendent des lots de 10 individus nés en captivité, de 6 à 20 € pour les espèces courantes, avec un envoi en colis express." },
+      { t: 'Bourses aux reptiles et insectes', d: "Les bourses régionales réunissent des éleveurs amateurs : prix souvent plus bas, animaux vus avant l'achat et conseils de vive voix." },
+      { t: 'Échanges entre éleveurs', d: "Forums et groupes d'éleveurs échangent volontiers leurs surplus. C'est aussi le meilleur moyen de brasser des lignées rares." }
+    ],
+    conseils: [
+      "Commandez au printemps ou en automne : les envois par temps de gel ou de canicule sont risqués.",
+      "Préparez le bac avant la livraison et installez les cloportes dès réception.",
+      "Achetez au moins 10 individus, davantage pour les espèces lentes, afin d'avoir les deux sexes.",
+      "Préférez les animaux nés en captivité et demandez la localité d'origine pour les espèces rares.",
+      "Les prix indiqués sur ce site ont été relevés en 2025-2026 dans des boutiques françaises : ils varient selon les naissances et les vendeurs."
+    ],
+    regles: [
+      "Ne prélevez que des espèces communes, en petit nombre, et jamais dans une réserve naturelle ni dans une grotte.",
+      "Ne relâchez jamais un cloporte exotique ou acheté dans la nature : il pourrait s'installer et concurrencer la faune locale.",
+      "Les espèces protégées ou menacées (marais, dunes, grottes) ne se prélèvent pas, même en petit nombre."
+    ]
+  };
+
   const VEDETTES = ['cubaris-rubber-ducky', 'armadillidium-klugii', 'porcellio-laevis', 'cubaris-panda-king', 'armadillidium-maculatum', 'merulanella-ember-bee', 'porcellio-expansus', 'hemilepistus-reaumuri', 'porcellio-magnificus', 'cubaris-jupiter'];
 
-  window.CONTENT = { LABELS, FAMILLES, FAMILY_ORDER, SETUPS, NIVEAUX, PROBLEMES, ANATOMIE, CYCLE, ADAPTATIONS, GLOSSAIRE, TAXO, VEDETTES };
+  window.CONTENT = { LABELS, FAMILLES, FAMILY_ORDER, SETUPS, NIVEAUX, PROBLEMES, ANATOMIE, CYCLE, ADAPTATIONS, GLOSSAIRE, TAXO, VEDETTES, ACHAT };
 })();
